@@ -52,9 +52,15 @@ function SellerOrders({ seller }) {
   console.log("Orders", orders);
 
   return (
-    <div className="px-12 py-8 box-border flex flex-col flex-1 h-[calc(100vh-100px)">
-      <div className="flex flex-row items-center justify-between  px-20 mb-6">
-        {model && <ViewOrderScreen orderId={orderId} setModel={setModel} />}
+    <div className="sm:px-12 sm:py-8 w-[300px] sm:w-[450px] md:w-[570px] lg:w-[800px] p-4 pt-8 mx-auto  overflow-x-hidden h-[calc(100vh-100px)]">
+      <div className="flex flex-row items-center justify-between  sm:px-6 mb-6">
+        {model && (
+          <ViewOrderScreen
+            sellerView={true}
+            orderId={orderId}
+            setModel={setModel}
+          />
+        )}
         <h6
           className={` ${
             activeTab === "all"
@@ -200,7 +206,7 @@ function SellerOrders({ seller }) {
           </table>
         </div>
       ) : (
-        <div className="flex -mt-12 h-full items-center justify-center">
+        <div className="flex  h-full items-center justify-center">
           <p className="text-red-400 text-xl font-semibold">
             No Order Available
           </p>

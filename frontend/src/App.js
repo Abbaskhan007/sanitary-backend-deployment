@@ -28,6 +28,8 @@ import ImageSearch from "./Screens/ImageSearch";
 import Sidebar from "./Components/Sidebar";
 import ShippingAddressFormScreen from "./Screens/ShippingAddressFormScreen";
 import CategoryProducts from "./Screens/CategoryProducts";
+import ProductAnalytics from "./Screens/ProductAnalytics";
+import StoreAnalytics from "./Screens/StoreAnalytics";
 
 function App() {
   const [show, setShow] = useState(false);
@@ -52,6 +54,8 @@ function App() {
           <Route path="shipping" element={<Shipping />} />
           <Route path="paymentMethod" element={<PaymentMethodScreen />} />
           <Route path="orderDetails" element={<OrderDetails />} />
+          <Route path="productAnalytics/:id" element={<ProductAnalytics />} />
+          <Route path="storeAnalytics/:id" element={<StoreAnalytics />} />
           <Route
             path="categoryProduct/:category"
             element={<CategoryProducts />}

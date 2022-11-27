@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import Axios from "axios";
 import {
@@ -31,8 +31,26 @@ function HomeScreen({
   const [showFilter, setShowFilter] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [limit, setLimit] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const ref = useRef(null);
+
+  const handleScroll = () => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // const scrollTo = ref => {
+  //   if (ref && ref.current /* + other conditions */) {
+  //     ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  //   }
+  // };
+
+  // function handleScrollToElement(event) {
+  //   if (myRef && myRef.current) window.scrollTo(0, myRef.current.offsetBottom);
+  // }
 
   useEffect(() => {
+    console.log("Running -------------------");
     fetchProducts();
     getCategories();
     getWorkerCategories();
@@ -50,6 +68,11 @@ function HomeScreen({
   ) : (
     <div className=" min-h-[calc(100vh-100px)] pb-24">
       <Banner />
+      {loading && (
+        <div className="absolute inset-0 bg-white z-40">
+          <Loading />
+        </div>
+      )}
       <div className="p-2  px-6 sm:px-12">
         <div className="flex  items-center  lg:space-x-12 md:space-x-8 space-x-4 ">
           <div className="flex flex-1 items-center bg-white  p-2 px-3 rounded-md  border-2 border-gray-300 ">
@@ -60,7 +83,7 @@ function HomeScreen({
               placeholder="Search product"
               onChange={e => onSearch(e.target.value)}
             />
-            <ImageSearch />
+            <ImageSearch setLoading={setLoading} executeScroll={handleScroll} />
           </div>
 
           <div
@@ -90,8 +113,12 @@ function HomeScreen({
         <h2 className="text-center text-4xl mb-12 mt-20 border-b-[2px] border-gray-300 pb-2 max-w-[450px] font-light mx-auto">
           Top Rated Products
         </h2>
+
         {productList.products.length > 0 ? (
-          <div className="grid  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:grid-cols-2 space-y-6 sm:space-y-0 sm:gap-8  bg-[#ffffff]">
+          <div
+            ref={ref}
+            className="grid  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:grid-cols-2 space-y-6 sm:space-y-0 sm:gap-8  bg-[#ffffff]"
+          >
             {productList.products.map(product => (
               <ProductCard key={product._id} product={product} />
             ))}

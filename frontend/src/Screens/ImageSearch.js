@@ -5,10 +5,11 @@ import { connect } from "react-redux";
 import { PRODUCT_SEARCH } from "../Redux/Constants";
 import mime from "mime";
 
-function ImageSearch({ fetchProducts }) {
+function ImageSearch({ fetchProducts, setLoading, executeScroll }) {
   const imageRef = useRef(null);
 
   const onChange = async event => {
+    setLoading(true);
     try {
       console.log("*****", event.target.files[0]);
       const formData = new FormData();
@@ -27,12 +28,14 @@ function ImageSearch({ fetchProducts }) {
         "/api/products/imageSearch",
         public_ids
       );
+      setTimeout(executeScroll(), 1200);
 
       console.log("Product Data after image search: ", productData);
       fetchProducts(productData.data);
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
   const onImagePress = () => {
     imageRef.current.click();

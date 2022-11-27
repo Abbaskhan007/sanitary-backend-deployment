@@ -19,7 +19,7 @@ function EditStore({ products, productCategories }) {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [showImage, setShowImage] = useState(null);
-  const [cloudinaryImage, setCloudinaryImage] = useState({});
+  const [cloudinaryImage, setCloudinaryImage] = useState(false);
   const [category, setCategory] = useState({
     value: "Urinals",
     label: "Urinals",
@@ -61,20 +61,23 @@ function EditStore({ products, productCategories }) {
       setError("Please Fill all the fields");
     } else {
       try {
-        const form = new FormData();
-        form.append("file", cloudinaryImage);
-        form.append("upload_preset", "sanitary");
-        form.append("folder", "stores");
-        const cloudinayResponse = await Axios.post(
-          "https://api.cloudinary.com/v1_1/dlxyvl6sb/image/upload",
-          form
-        );
+        let cloudinayResponse;
+        if (cloudinaryImage) {
+          const form = new FormData();
+          form.append("file", cloudinaryImage);
+          form.append("upload_preset", "sanitary");
+          form.append("folder", "stores");
+          cloudinayResponse = await Axios.post(
+            "https://api.cloudinary.com/v1_1/dlxyvl6sb/image/upload",
+            form
+          );
+        }
         const data = {
           ...storeData,
           name,
           description,
           category: category.value,
-          image: cloudinayResponse.data.url,
+          image: cloudinayResponse?.data?.url || image,
         };
         const response = await Axios.put("/api/stores/updateStore", data);
         console.log("Response", response);

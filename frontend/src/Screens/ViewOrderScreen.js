@@ -7,7 +7,11 @@ import Slider from "../Components/Slider";
 import StarBox from "../Components/StarBox";
 import TrackOrder from "../Components/TrackOrder";
 
-export default function ViewOrderScreen({ setModel, orderId }) {
+export default function ViewOrderScreen({
+  setModel,
+  orderId,
+  sellerView = false,
+}) {
   const [orderData, setorderData] = useState({});
   const [loading, setLoading] = useState(false);
   const [review, setReview] = useState("");
@@ -50,7 +54,7 @@ export default function ViewOrderScreen({ setModel, orderId }) {
           <Loading />
         ) : (
           <div>
-            <Slider images={orderData.productId.images}/>
+            <Slider images={orderData.productId.images} />
             <div className="flex flex-row items-center space-x-2 mb-4 mt-8">
               <p className="font-medium">Name: </p>
               <p className="">{orderData?.productId?.name}</p>
@@ -128,6 +132,10 @@ export default function ViewOrderScreen({ setModel, orderId }) {
                 <p className="ml-3 text-sm text-gray-400">
                   {orderData?.review}
                 </p>
+              </div>
+            ) : sellerView ? (
+              <div>
+                <p className="text-center text-lg font-semibold my-2">Note Rated till yet</p>
               </div>
             ) : (
               <div>

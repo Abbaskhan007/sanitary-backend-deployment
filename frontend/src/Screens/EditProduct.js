@@ -137,7 +137,7 @@ function EditProduct({ productCategories }) {
         );
         console.log("response*********************** (4)", response);
         if (response.status === 200) {
-          toast.success("Store Created Successfully!!!", {
+          toast.success("Product Updated Successfully!!!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,

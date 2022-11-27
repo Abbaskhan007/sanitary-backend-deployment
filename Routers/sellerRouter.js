@@ -30,8 +30,9 @@ sellerRouter.get("/getSeller/:userId", async (req, res) => {
   }
 });
 
+//jjjj
+
 sellerRouter.get("/getSales/:sellerId", async (req, res) => {
-  console.log("------------- 1 2 3 4 5");
   const { sellerId } = req.params;
   console.log("Seller Id", sellerId);
   const sales = await orderModel
@@ -107,6 +108,73 @@ sellerRouter.get("/getSales/:sellerId", async (req, res) => {
     });
   } else {
     res.status(400).json({ message: "Sales not found" });
+  }
+});
+
+sellerRouter.get("/sellerDateSale/:sellerId", async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+    console.log("Starts Day", startDate, "End Date", endDate);
+    const { sellerId } = req.params;
+    const totalSellerSales = await orderModel
+      .aggregate()
+      .match({
+        sellerId: mongoose.Types.ObjectId(sellerId),
+
+        $expr: {
+          $and: [
+            { $gt: ["$createdAt", new Date(startDate)] },
+            { $lt: ["$createdAt", new Date(endDate)] },
+          ],
+        },
+      })
+      .group({
+        _id: null,
+        sales: { $sum: "$amount" },
+      });
+
+    const paymentSales = await orderModel
+      .aggregate()
+      .match({
+        sellerId: mongoose.Types.ObjectId(sellerId),
+        $expr: {
+          $and: [
+            { $gt: ["$createdAt", new Date(startDate)] },
+            { $lt: ["$createdAt", new Date(endDate)] },
+          ],
+        },
+      })
+      .group({
+        _id: { method: "$paymentMethod" },
+        sales: { $sum: "$amount" },
+      });
+
+    const bankOrders = await orderModel
+      .find({
+        sellerId,
+        paymentMethod: "bank",
+        createdAt: { $gt: new Date(startDate), $lt: new Date(endDate) },
+      })
+      .populate("productId");
+
+    const blockchainOrders = await orderModel
+      .find({
+        sellerId,
+        paymentMethod: "blockchain",
+        createdAt: { $gt: new Date(startDate), $lt: new Date(endDate) },
+      })
+      .populate("productId");
+
+
+    res.status(200).json({
+      totalSales: totalSellerSales,
+      paymentSales,
+      bankOrders,
+      blockchainOrders,
+    });
+  } catch (err) {
+    console.log(err, err.message);
+    res.status(401).json({ message: err });
   }
 });
 

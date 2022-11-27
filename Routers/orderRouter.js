@@ -4,6 +4,9 @@ const orderModel = require("../Models/orderModel");
 const productModel = require("../Models/productModel");
 const storeModel = require("../Models/storeModel");
 const orderRouter = express.Router();
+const mongoose = require("mongoose");
+const endOfDayfrom = require("date-fns/endOfDay");
+const startOfDay = require("date-fns/startOfDay");
 
 orderRouter.post("/create", async (req, res) => {
   console.log("Req body", req.body);
@@ -248,8 +251,304 @@ orderRouter.put("/updateOrder", async (req, res) => {
       console.log("Updated Order: ", updatedOrder);
       res.status(200).json(updatedOrder);
     }
+  } catch (err) {}
+});
+
+orderRouter.get("/productSale/:productId", async (req, res) => {
+  console.log("------------- 1 2 3 4 5");
+  const { productId } = req.params;
+
+  console.log("Seller Id", productId);
+  const sales = await orderModel
+    .aggregate()
+    .match({
+      productId: mongoose.Types.ObjectId(productId),
+    })
+    .group({
+      _id: { month: { $month: { $toDate: "$createdAt" } } },
+      sales: { $sum: "$amount" },
+    })
+    .sort("_id.month");
+
+  const blockchainSales = await orderModel
+    .aggregate()
+    .match({
+      productId: mongoose.Types.ObjectId(productId),
+      paymentMethod: "blockchain",
+    })
+    .group({
+      _id: {
+        month: { $month: { $toDate: "$createdAt" } },
+      },
+      sales: { $sum: "$amount" },
+    })
+    .sort("_id.month");
+
+  const bankSales = await orderModel
+    .aggregate()
+    .match({
+      productId: mongoose.Types.ObjectId(productId),
+      paymentMethod: "bank",
+    })
+    .group({
+      _id: {
+        month: { $month: { $toDate: "$createdAt" } },
+      },
+      sales: { $sum: "$amount" },
+    })
+    .sort("_id.month");
+
+  const bankOrders = await orderModel
+    .find({
+      productId,
+      paymentMethod: "bank",
+    })
+    .populate("productId");
+
+  const blockchainOrders = await orderModel
+    .find({
+      productId,
+      paymentMethod: "blockchain",
+    })
+    .populate("productId");
+
+  const totalProductSales = await orderModel
+    .aggregate()
+    .match({
+      productId: mongoose.Types.ObjectId(productId),
+    })
+    .group({
+      _id: null,
+      sales: { $sum: "$amount" },
+    })
+    .sort("_id.month");
+
+  if (sales) {
+    console.log(
+      "-------",
+      sales,
+      blockchainSales,
+      bankSales,
+      bankOrders,
+      blockchainOrders,
+      totalProductSales
+    );
+    res.status(200).json({
+      totalSales: sales,
+      blockchainSales,
+      bankSales,
+      bankOrders,
+      blockchainOrders,
+      totalProductSales,
+    });
+  } else {
+    res.status(400).json({ message: "Sales not found" });
+  }
+});
+
+orderRouter.get("/productDateSale/:productId", async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+    console.log("Starts Day", startDate, "End Date", endDate);
+    const { productId } = req.params;
+    const totalProductSales = await orderModel
+      .aggregate()
+      .match({
+        productId: mongoose.Types.ObjectId(productId),
+
+        $expr: {
+          $and: [
+            { $gt: ["$createdAt", new Date(startDate)] },
+            { $lt: ["$createdAt", new Date(endDate)] },
+          ],
+        },
+      })
+      .group({
+        _id: null,
+        sales: { $sum: "$amount" },
+      });
+
+    const paymentSales = await orderModel
+      .aggregate()
+      .match({
+        productId: mongoose.Types.ObjectId(productId),
+        $expr: {
+          $and: [
+            { $gt: ["$createdAt", new Date(startDate)] },
+            { $lt: ["$createdAt", new Date(endDate)] },
+          ],
+        },
+      })
+      .group({
+        _id: { method: "$paymentMethod" },
+        sales: { $sum: "$amount" },
+      });
+    console.log("Product Sales -------", totalProductSales, paymentSales);
+    res.status(200).json({ totalSales: totalProductSales, paymentSales });
   } catch (err) {
-    res.status(400).json(err);
+    console.log(err, err.message);
+    res.status(401).json({ message: err });
+  }
+});
+
+//For stores Analytics
+
+orderRouter.get("/storeSale/:storeId", async (req, res) => {
+  console.log("------------- 1 2 3 4 5");
+  const { storeId } = req.params;
+
+  console.log("Store Id", storeId);
+  const sales = await orderModel
+    .aggregate()
+    .match({
+      storeId: mongoose.Types.ObjectId(storeId),
+    })
+    .group({
+      _id: { month: { $month: { $toDate: "$createdAt" } } },
+      sales: { $sum: "$amount" },
+    })
+    .sort("_id.month");
+
+  const blockchainSales = await orderModel
+    .aggregate()
+    .match({
+      storeId: mongoose.Types.ObjectId(storeId),
+      paymentMethod: "blockchain",
+    })
+    .group({
+      _id: {
+        month: { $month: { $toDate: "$createdAt" } },
+      },
+      sales: { $sum: "$amount" },
+    })
+    .sort("_id.month");
+
+  const bankSales = await orderModel
+    .aggregate()
+    .match({
+      storeId: mongoose.Types.ObjectId(storeId),
+      paymentMethod: "bank",
+    })
+    .group({
+      _id: {
+        month: { $month: { $toDate: "$createdAt" } },
+      },
+      sales: { $sum: "$amount" },
+    })
+    .sort("_id.month");
+
+  const bankOrders = await orderModel
+    .find({
+      storeId,
+      paymentMethod: "bank",
+    })
+    .populate("productId");
+
+  const blockchainOrders = await orderModel
+    .find({
+      storeId,
+      paymentMethod: "blockchain",
+    })
+    .populate("productId");
+
+  const totalProductSales = await orderModel
+    .aggregate()
+    .match({
+      storeId: mongoose.Types.ObjectId(storeId),
+    })
+    .group({
+      _id: null,
+      sales: { $sum: "$amount" },
+    })
+    .sort("_id.month");
+
+  if (sales) {
+    console.log(
+      "-------",
+      sales,
+      blockchainSales,
+      bankSales,
+      bankOrders,
+      blockchainOrders,
+      totalProductSales
+    );
+    res.status(200).json({
+      totalSales: sales,
+      blockchainSales,
+      bankSales,
+      bankOrders,
+      blockchainOrders,
+      totalProductSales,
+    });
+  } else {
+    res.status(400).json({ message: "Sales not found" });
+  }
+});
+
+orderRouter.get("/storeDateSale/:storeId", async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+    console.log("Starts Day", startDate, "End Date", endDate);
+    const { storeId } = req.params;
+    const totalProductSales = await orderModel
+      .aggregate()
+      .match({
+        storeId: mongoose.Types.ObjectId(storeId),
+
+        $expr: {
+          $and: [
+            { $gt: ["$createdAt", new Date(startDate)] },
+            { $lt: ["$createdAt", new Date(endDate)] },
+          ],
+        },
+      })
+      .group({
+        _id: null,
+        sales: { $sum: "$amount" },
+      });
+
+    const paymentSales = await orderModel
+      .aggregate()
+      .match({
+        storeId: mongoose.Types.ObjectId(storeId),
+        $expr: {
+          $and: [
+            { $gt: ["$createdAt", new Date(startDate)] },
+            { $lt: ["$createdAt", new Date(endDate)] },
+          ],
+        },
+      })
+      .group({
+        _id: { method: "$paymentMethod" },
+        sales: { $sum: "$amount" },
+      });
+
+    const bankOrders = await orderModel
+      .find({
+        storeId,
+        paymentMethod: "bank",
+        createdAt: { $gt: new Date(startDate), $lt: new Date(endDate) },
+      })
+      .populate("productId");
+
+    const blockchainOrders = await orderModel
+      .find({
+        storeId,
+        paymentMethod: "blockchain",
+        createdAt: { $gt: new Date(startDate), $lt: new Date(endDate) },
+      })
+      .populate("productId");
+
+    console.log("Product Sales -------", totalProductSales, paymentSales);
+    res.status(200).json({
+      totalSales: totalProductSales,
+      paymentSales,
+      bankOrders,
+      blockchainOrders,
+    });
+  } catch (err) {
+    console.log(err, err.message);
+    res.status(401).json({ message: err });
   }
 });
 

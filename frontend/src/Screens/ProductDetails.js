@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { useSearchParams, useParams } from "react-router-dom";
+import { useSearchParams, useParams, NavLink } from "react-router-dom";
 import Loading from "../Components/Loading";
 import ErrorBox from "../Components/ErrorBox";
 import RatingStars from "../Components/RatingStars";
@@ -11,7 +11,13 @@ import { connect } from "react-redux";
 import { ADD_TO_CART, ADD_TO_CART_LOCAL } from "../Redux/Constants";
 import ReviewBox from "../Components/ReviewBox";
 
-function ProductDetails({ addToCartAction, user, cart, addToCartLocal }) {
+function ProductDetails({
+  addToCartAction,
+  user,
+  cart,
+  addToCartLocal,
+  seller,
+}) {
   const [productData, setProductData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, seterror] = useState(null);
@@ -85,7 +91,19 @@ function ProductDetails({ addToCartAction, user, cart, addToCartLocal }) {
     <ErrorBox variant="fail" message={error} />
   ) : (
     <div>
-      <div className="flex flex-col flex-1 space-x-0 md:space-x-8 space-y-8 md:flex-row md:items-center py-4 px-6 box-border sm:flex-col sm:px-10">
+      <div
+        className={` relative flex flex-col flex-1 space-x-0 md:space-x-8 space-y-8 md:flex-row md:items-center py-4 px-6 box-border sm:flex-col sm:px-10 ${
+          seller === productData.seller && "mt-4"
+        }`}
+      >
+        {seller === productData.seller && (
+          <NavLink
+            className="absolute top-0 right-4 bg-blue-500 text-white px-4 py-[6px] rounded-md text-sm font-medium"
+            to={`/productAnalytics/${productData._id}`}
+          >
+            View Analytics
+          </NavLink>
+        )}
         <div className="flex-1 sm:px-10">
           <Slider images={productData.images} />
         </div>
@@ -171,6 +189,7 @@ const mapStateToProps = state => {
   return {
     user: state.user,
     cart: state.cart,
+    seller: state.seller._id,
   };
 };
 

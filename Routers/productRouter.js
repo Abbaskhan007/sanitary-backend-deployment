@@ -176,7 +176,7 @@ router.post("/imageSearch", async (req, res) => {
     (err, data) => {
       if (err) throw err;
       console.log(`Data of Image Search><><><>//: ${data}`);
-      res.status("200").send(data);
+      res.status(200).send(data);
     }
   );
   // const products = await productModel.find({

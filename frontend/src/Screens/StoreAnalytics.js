@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { FETCH_SELLER_DATA } from "../Redux/Constants";
+// import React from "react";
+// import { useParams } from "react-router-dom";
+
+// export default function StoreAnalytics() {
+//   const { id } = useParams();
+//   console.log("Id", id);
+//   return <div>StoreAnalytics</div>;
+// }
+
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Chart from "chart.js/auto";
 import { Line, Pie } from "react-chartjs-2";
 import Axios from "axios";
-import { MdCancel } from "react-icons/md";
 import DateRange from "../Components/DateRange";
+import { MdCancel } from "react-icons/md";
 
-function SellerHome({ user, fetchSellerData, seller }) {
-  console.log("Seller-----", seller);
+export default function StoreAnalytics() {
+  const { id } = useParams();
   const [sales, setSales] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [showDate, setShowDate] = useState(false);
   const [totalSales, setTotalSales] = useState(0);
@@ -28,23 +36,45 @@ function SellerHome({ user, fetchSellerData, seller }) {
     "Toilet Seats": 0,
     Mirrors: 0,
   });
+
   const [blockchainSale, setBlockchainSales] = useState([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ]);
   const [bankSales, setBankSales] = useState([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ]);
-
   const [etheriumValue, setEtheriumValue] = useState(0);
 
   const currentMonth = new Date().getMonth();
 
+  const months = [
+    { month: "Jan", num: 0 },
+    { month: "Feb", num: 1 },
+    { month: "Mar", num: 2 },
+    { month: "Apr", num: 3 },
+    { month: "May", num: 4 },
+    { month: "Jun", num: 5 },
+    { month: "Jul", num: 6 },
+    { month: "Aug", num: 7 },
+    { month: "Sep", num: 8 },
+    { month: "Oct", num: 9 },
+    { month: "Nov", num: 10 },
+    { month: "Dec", num: 11 },
+  ];
+
+  const labels = [];
+
+  for (var i = 0; i < 12; i++) {
+    labels.push(months[(currentMonth + i) % 12]);
+  }
+
   const onDateSearch = async () => {
     const { data } = await Axios.get(
-      `/api/seller/sellerDateSale/${seller}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
+      `/api/orders/storeDateSale/${id}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
     );
 
     console.log("Data------", data);
+    //setTotalSales(data.totalSales[0].sales);
     const ctgInside = {
       Basins: 0,
       Sinks: 0,
@@ -86,6 +116,13 @@ function SellerHome({ user, fetchSellerData, seller }) {
   };
 
   const fetchSales = async () => {
+    console.log("---------total sales", totalSales);
+
+    const { data } = await Axios.get(
+      `/api/orders/storeSale/${id}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
+    );
+
+    console.log("Data --------", data);
     let total = 0;
     const sales = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const blockchainSale = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -103,12 +140,9 @@ function SellerHome({ user, fetchSellerData, seller }) {
     };
     const typeInside = { bank: 0, blockchain: 0 };
 
-    const { data } = await Axios.get(`/api/seller/getSales/${seller}`);
-
     const bankSalesPerMonth = data.bankSales.map(item => {
       sales[item._id.month - 1] = sales[item._id.month - 1] + item.sales;
       bankSales[item._id.month - 1] = item.sales;
-      //setTotalSales(prev => prev + totalSales + item.sales);
       total += item.sales;
     });
 
@@ -116,10 +150,9 @@ function SellerHome({ user, fetchSellerData, seller }) {
       sales[item._id.month - 1] =
         sales[item._id.month - 1] + item.sales * etheriumValue;
       blockchainSale[item._id.month - 1] = item.sales * etheriumValue;
-      //setTotalSales(prev => prev + item.sales * etheriumValue);
       total += item.sales * etheriumValue;
+      // totalSales = totalSales + item.sales * etheriumValue;
     });
-
     setTotalSales(total);
     data.bankOrders.map(item => {
       typeInside[item.paymentMethod] =
@@ -148,6 +181,8 @@ function SellerHome({ user, fetchSellerData, seller }) {
     setEtheriumValue(data[0].current_price);
   };
 
+  console.log("Sales Total", totalSales);
+
   useEffect(() => {
     if (etheriumValue > 0 && !showDate) {
       fetchSales();
@@ -160,30 +195,9 @@ function SellerHome({ user, fetchSellerData, seller }) {
 
   useEffect(() => {
     if (showDate) {
-       onDateSearch();
+      onDateSearch();
     }
   }, [startDate, endDate, showDate]);
-
-  const months = [
-    { month: "Jan", num: 0 },
-    { month: "Feb", num: 1 },
-    { month: "Mar", num: 2 },
-    { month: "Apr", num: 3 },
-    { month: "May", num: 4 },
-    { month: "Jun", num: 5 },
-    { month: "Jul", num: 6 },
-    { month: "Aug", num: 7 },
-    { month: "Sep", num: 8 },
-    { month: "Oct", num: 9 },
-    { month: "Nov", num: 10 },
-    { month: "Dec", num: 11 },
-  ];
-
-  const labels = [];
-
-  for (var i = 0; i < 12; i++) {
-    labels.push(months[(currentMonth + i) % 12]);
-  }
 
   const data = {
     labels: labels.map(item => item.month),
@@ -210,10 +224,6 @@ function SellerHome({ user, fetchSellerData, seller }) {
     ],
   };
 
-  useEffect(() => {
-    fetchSellerData(user);
-  }, []);
-
   const piePaymentlabels = ["Blockchain", "Bank"];
 
   const piePaymentData = {
@@ -238,6 +248,7 @@ function SellerHome({ user, fetchSellerData, seller }) {
     "Toilet Seats",
     "Mirrors",
   ];
+
   const pieData = {
     labels: pielabels,
     datasets: [
@@ -259,13 +270,16 @@ function SellerHome({ user, fetchSellerData, seller }) {
     ],
   };
 
+  console.log("Id", id);
   return (
     <div className="py-8 px-12">
       <h3 className="text-5xl font-light text-center my-8">Analytics</h3>
       <div className="flex items-center justify-center space-x-8">
         <div className="w-48 py-6 space-y-2  shadow-lg shadow-gray-400 flex flex-col justify-center items-center border border-gray-300  rounded-lg">
           <h5 className="text-2xl ">Total Sales</h5>
-          <h6 className="text-lg text-gray-400">Rs. {totalSales.toFixed(0)}</h6>
+          <h6 className="text-lg text-gray-400">
+            Rs. {totalSales?.toFixed(0)}
+          </h6>
         </div>
         <div className="w-48 py-6 space-y-2 shadow-lg shadow-gray-400 flex flex-col justify-center items-center border border-gray-300 rounded-lg">
           <h5 className="text-2xl ">Previous Month</h5>
@@ -322,31 +336,14 @@ function SellerHome({ user, fetchSellerData, seller }) {
           <div className="max-w-2xl mx-auto">
             <Pie data={pieData} />
           </div>
+          <h3 className="text-4xl font-light mb-6 mt-16">
+            Payment Method Sales
+          </h3>
+          <div className="max-w-2xl mx-auto">
+            <Pie data={piePaymentData} />
+          </div>
         </>
       )}
     </div>
   );
 }
-
-const mapStateToProps = state => {
-  return {
-    user: state.user.user._id,
-    seller: state.seller._id,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchSellerData: async user => {
-      try {
-        const response = await Axios.get(`/api/seller/getSeller/${user}`);
-        console.log("Response", response);
-        dispatch({ type: FETCH_SELLER_DATA, payload: response.data });
-      } catch (err) {
-        alert(err.message);
-      }
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SellerHome);

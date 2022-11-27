@@ -48,7 +48,7 @@ function UserOrdersScreen({ navigation, user, admin }) {
   console.log("Order Id", orderId);
   console.log("Orders__________", orders);
   return (
-    <div className="sm:px-12 sm:py-8 w-[300px] sm:w-[450px] md:w-[570px] lg:w-[800px] p-4 pt-8 mx-auto  overflow-hidden h-[calc(100vh-100px)]">
+    <div className="sm:px-12 sm:py-8 w-[300px] sm:w-[450px] md:w-[570px] lg:w-[800px] p-4 pt-8 mx-auto  overflow-x-hidden min-h-[calc(100vh-100px)]">
       <div className="flex flex-row items-center justify-between  sm:px-6 mb-6 ">
         {model && <ViewOrderScreen orderId={orderId} setModel={setModel} />}
         <h6
@@ -131,10 +131,16 @@ function UserOrdersScreen({ navigation, user, admin }) {
                     {order.amount}
                   </td>
                   <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                    {order.createdAt}
+                    {`${order.createdAt.split("T")[0]} (${
+                      order.createdAt.split("T")[1].split(".")[0]
+                    }) `}
                   </td>
                   <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                    {order.deliveredAt ?? "Not Delivered"}
+                    {order.deliveredAt
+                      ? `${order.deliveredAt.split("T")[0]} (${
+                          order.deliveredAt.split("T")[1].split(".")[0]
+                        }) `
+                      : "Not Delivered"}
                   </td>
                   <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                     <p
