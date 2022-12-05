@@ -10,6 +10,7 @@ import {
   STORE_FETCH_SUCCESS,
 } from "../Redux/Constants";
 import axios from "axios";
+import url from "../Constants";
 
 function StoreCard({ store, seller, fetchStoreData }) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function StoreCard({ store, seller, fetchStoreData }) {
   const onDelete = async e => {
     e.stopPropagation();
 
-    const response = await Axios.delete(`/api/stores/deleteStore/${store._id}`);
+    const response = await Axios.delete(`${url}/stores/deleteStore/${store._id}`);
     console.log("Delete Response", response);
     if (response.status === 200) {
       fetchStoreData();
@@ -87,7 +88,7 @@ const mapDispatchToProps = dispatch => {
       dispatch({ type: STORE_FETCH_REQUEST });
 
       try {
-        const { data } = await axios.get("api/stores/getStores");
+        const { data } = await axios.get(`${url}/stores/getStores`);
         dispatch({
           type: STORE_FETCH_SUCCESS,
           payload: data,

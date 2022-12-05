@@ -7,6 +7,7 @@ import Axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import { EMPTY_CART } from "../Redux/Constants";
+import url from "../Constants";
 
 function BlockchainPaymentScreen({
   user,
@@ -170,7 +171,7 @@ function BlockchainPaymentScreen({
             "---------- Etherium Price ********",
             convertToEtherium(product.price)
           );
-          const { data } = await Axios.post("/api/orders/create", {
+          const { data } = await Axios.post(`${url}/orders/create`, {
             ...orderData,
             amount: (product.price / etheriumValue).toFixed(6),
             ...product,
@@ -302,7 +303,7 @@ const mapDispatchToProps = dispatch => {
   return {
     emptyCart: async userId => {
       console.log("Emptying Cart------");
-      const { data } = await Axios.delete(`/api/cart/emptyCart/${userId}`);
+      const { data } = await Axios.delete(`${url}/cart/emptyCart/${userId}`);
       console.log("Data of empty cart-----", data);
       dispatch({ type: EMPTY_CART });
     },

@@ -5,13 +5,14 @@ import Slider from "../Components/Slider";
 import Loading from "../Components/Loading";
 import RatingStars from "../Components/RatingStars";
 import moment from "moment";
+import url from "../Constants";
 
 export default function WorkerDetails() {
   const { workerId } = useParams();
   const [workerData, setWorkerData] = useState({});
   console.log("Worker Data", workerData);
   const fetchWorker = async () => {
-    const { data } = await Axios.get(`/api/worker/getWorkers/${workerId}`);
+    const { data } = await Axios.get(`${url}/worker/getWorkers/${workerId}`);
     setWorkerData(data);
   };
   useEffect(() => {

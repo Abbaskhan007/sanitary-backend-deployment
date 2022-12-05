@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import ErrorBox from "../Components/ErrorBox";
 import { useNavigate } from "react-router-dom";
 import Loading from "../Components/Loading";
+import url from "../Constants";
 
 function CreateStore({ seller, productCategories }) {
   const [name, setName] = useState("");
@@ -55,7 +56,7 @@ function CreateStore({ seller, productCategories }) {
       };
 
       try {
-        const response = await Axios.post("/api/stores/createStore", data);
+        const response = await Axios.post(`${url}/stores/createStore`, data);
         console.log("Store Creating Response", response);
 
         if (response.status === 200) {
@@ -84,8 +85,8 @@ function CreateStore({ seller, productCategories }) {
     }
     setLoading(false);
   };
-  console.log("-------",category, description)
-  
+  console.log("-------", category, description);
+
   if (loading) {
     return <Loading />;
   } else {

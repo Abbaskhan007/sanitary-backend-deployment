@@ -6,6 +6,7 @@ import RatingStars from "../Components/RatingStars";
 import Slider from "../Components/Slider";
 import StarBox from "../Components/StarBox";
 import TrackOrder from "../Components/TrackOrder";
+import url from "../Constants";
 
 export default function ViewOrderScreen({
   setModel,
@@ -18,7 +19,7 @@ export default function ViewOrderScreen({
   const [stars, setStars] = useState(1);
   const fetchOrder = async () => {
     setLoading(true);
-    const { data } = await Axios.get(`/api/orders/getOrder/${orderId}`);
+    const { data } = await Axios.get(`${url}/orders/getOrder/${orderId}`);
     console.log("Data", data);
     setorderData(data);
     setLoading(false);
@@ -29,7 +30,7 @@ export default function ViewOrderScreen({
   //something
   console.log("Stars", stars);
   const onSubmit = async () => {
-    const { data } = await Axios.put(`/api/orders/rate`, {
+    const { data } = await Axios.put(`${url}/orders/rate`, {
       review,
       rating: stars,
       orderId: orderData._id,

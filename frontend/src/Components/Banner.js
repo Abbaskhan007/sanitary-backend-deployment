@@ -1,12 +1,13 @@
 import Axios from "axios";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import url from "../Constants";
 
 export default function Banner() {
   const [banners, setBanners] = useState([]);
   const [counter, setCounter] = useState(0);
   const fetchBanners = async () => {
-    const { data } = await Axios.get("/api/banners");
+    const { data } = await Axios.get(`${url}/banners`);
     console.log("Data", data);
     setBanners(data);
   };

@@ -14,6 +14,12 @@ const workerCategoriesRouter = require("./Routers/workerCategoriesRouter");
 const shippingRouter = require("./Routers/shippingAddressRouter");
 const orderRouter = require("./Routers/orderRouter");
 const bannerModel = require("./Models/bannerModel");
+const cors = require("cors");
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -31,10 +37,6 @@ try {
 } catch (err) {
   console.log("Error:  ", err);
 }
-
-const app = express();
-
-app.use(express.json());
 
 app.get("/api/config", (req, res) => {
   console.log("__________________________________");

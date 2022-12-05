@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Switch from "react-switch";
 import { AiFillHome } from "react-icons/ai";
 import { BsBriefcaseFill } from "react-icons/bs";
+import url from "../Constants";
 
 function ShippingAddressFormScreen({ user }) {
   const { state } = useLocation();
@@ -53,7 +54,7 @@ function ShippingAddressFormScreen({ user }) {
     console.log("Shipping", shipping);
 
     if (state.action === "new") {
-      const { data } = await Axios.post(`api/shippingAddress/add`, {
+      const { data } = await Axios.post(`${url}/shippingAddress/add`, {
         userId: user._id,
         shipping,
       });
@@ -61,7 +62,7 @@ function ShippingAddressFormScreen({ user }) {
       alert("Shipping Address Added Successfully");
       navigate(-1);
     } else {
-      const { data } = await Axios.put(`api/shippingAddress/edit`, {
+      const { data } = await Axios.put(`${url}/shippingAddress/edit`, {
         shippingData: shipping,
         shippingAddressId: shippingAddress._id,
       });
@@ -74,7 +75,7 @@ function ShippingAddressFormScreen({ user }) {
   const onDelete = async () => {
     console.log("____________");
     const response = await Axios.delete(
-      `api/shippingAddress/delete/${shippingAddress._id}`
+      `${url}/shippingAddress/delete/${shippingAddress._id}`
     );
     console.log("Response of Delete", response);
     if (response.status === 200) {

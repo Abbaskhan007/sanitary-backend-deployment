@@ -7,6 +7,7 @@ import Loading from "../Components/Loading";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
+import url from "../Constants";
 
 function UploadProduct({ seller, productCategories }) {
   const imageRef = useRef(null);
@@ -99,7 +100,7 @@ function UploadProduct({ seller, productCategories }) {
         model,
       };
       try {
-        const response = await Axios.post("/api/products/addProduct", data);
+        const response = await Axios.post(`${url}/products/addProduct`, data);
         console.log("Response*************************", response);
         if (response.status === 200) {
           toast.success("Product Uploaded Successfully!!!", {

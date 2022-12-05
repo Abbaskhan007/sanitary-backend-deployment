@@ -3,6 +3,7 @@ import Axios from "axios";
 import Select from "react-select";
 import { IoCloseOutline } from "react-icons/io5";
 import { connect } from "react-redux";
+import url from "../Constants";
 
 function SellerForm({ user, productCategories }) {
   console.log("Product categories----", productCategories);
@@ -20,7 +21,7 @@ function SellerForm({ user, productCategories }) {
     const data = { categories: categoriesValue, description, user };
     try {
       const response = await Axios.post(
-        "/api/sellerRequests/sendSellerRequest",
+        `${url}/sellerRequests/sendSellerRequest`,
         data
       );
       console.log("Response", response);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { connect } from "react-redux";
 import StoreCard from "../Components/StoreCard";
+import url from "../Constants";
 
 function SellerStores({ seller, store }) {
   console.log("Seller", seller);
@@ -13,7 +14,7 @@ function SellerStores({ seller, store }) {
 
   const fetchStores = async () => {
     try {
-      const response = await Axios.get(`/api/stores/getStores/${seller._id}`);
+      const response = await Axios.get(`${url}/stores/getStores/${seller._id}`);
       console.log("Response", response);
       setStores(response.data);
     } catch (err) {

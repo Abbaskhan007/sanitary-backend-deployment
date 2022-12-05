@@ -8,6 +8,7 @@ import { MdModeEditOutline } from "react-icons/md";
 import { BsUpload } from "react-icons/bs";
 import { connect } from "react-redux";
 import { store } from "../Redux/rootReducer";
+import url from "../Constants";
 
 function EditStore({ products, productCategories }) {
   const imageRef = useRef(null);
@@ -36,7 +37,7 @@ function EditStore({ products, productCategories }) {
       "********************************----------------------------------"
     );
     try {
-      const response = await Axios.get(`/api/stores/getStore/${storeId}`);
+      const response = await Axios.get(`${url}/stores/getStore/${storeId}`);
       setStoreData(response.data);
       setName(response.data.name);
       setImage(response.data.image);
@@ -79,7 +80,7 @@ function EditStore({ products, productCategories }) {
           category: category.value,
           image: cloudinayResponse?.data?.url || image,
         };
-        const response = await Axios.put("/api/stores/updateStore", data);
+        const response = await Axios.put(`${url}/stores/updateStore`, data);
         console.log("Response", response);
         if (response.status === 200) {
           alert("Store Updated Successfully");

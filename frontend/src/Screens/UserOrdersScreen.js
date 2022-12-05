@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import ViewOrderScreen from "./ViewOrderScreen";
 import { connect } from "react-redux";
+import url from "../Constants";
 
 function UserOrdersScreen({ navigation, user, admin }) {
   const [orders, setOrders] = useState([]);
@@ -12,15 +13,15 @@ function UserOrdersScreen({ navigation, user, admin }) {
   const navigate = useNavigate();
 
   const fetchOrders = async () => {
-    let url;
+    let url1;
     if (admin) {
-      url = `/api/orders/getOrders/${activeTab}`;
+      url1 = `${url}/orders/getOrders/${activeTab}`;
     } else {
-      url = `/api/orders/myOrders/${user}?status=${activeTab}`;
+      url1 = `${url}/orders/myOrders/${user}?status=${activeTab}`;
     }
 
     try {
-      const { data } = await Axios.get(url);
+      const { data } = await Axios.get(url1);
       setOrders(data);
       console.log("Data of orders", data);
       setOrders(data);

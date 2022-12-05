@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ErrorBox from "../Components/ErrorBox";
 import AddressBox from "../Components/AddressBox";
 import Axios from "axios";
+import url from "../Constants";
 
 function ShippingScreen({ user, saveShipping }) {
   const [shippingData, setShippingData] = useState([]);
@@ -31,7 +32,7 @@ function ShippingScreen({ user, saveShipping }) {
   console.log("User...", user);
 
   const fetchAddresses = async () => {
-    const { data } = await Axios.get(`api/shippingAddress/${user._id}`);
+    const { data } = await Axios.get(`${url}/shippingAddress/${user._id}`);
     setShippingData(data);
   };
 

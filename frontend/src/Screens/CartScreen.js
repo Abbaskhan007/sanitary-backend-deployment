@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Axios from "axios";
 import CartItem from "../Components/CartItem";
 import ProductSummary from "../Components/productSummary";
+import url from "../Constants";
 
 function CartScreen({ cart }) {
   console.log("Cart_________", cart);
@@ -47,7 +48,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     changeQuantity: async body => {
-      const { data } = await Axios.post("/api/cart/changeQuantity", body);
+      const { data } = await Axios.post(`${url}/cart/changeQuantity`, body);
     },
   };
 };

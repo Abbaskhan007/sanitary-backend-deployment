@@ -4,6 +4,7 @@ import Axios from "axios";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { EMPTY_CART } from "../Redux/Constants";
+import url from "../Constants";
 
 function StripePayment({
   amount,
@@ -20,7 +21,7 @@ function StripePayment({
   const navigate = useNavigate();
   const payNow = async token => {
     try {
-      const { data } = await Axios.post("/api/pay", {
+      const { data } = await Axios.post(`${url}/pay`, {
         amount,
         name: "khan",
         orderId: "007",
@@ -32,7 +33,7 @@ function StripePayment({
        
       };
       const promise = products.map(async product => {
-        const { data } = await Axios.post(`/api/orders/create`, {
+        const { data } = await Axios.post(`${url}/orders/create`, {
           ...orderData,
           amount: product.price,
           ...product,
@@ -140,7 +141,7 @@ const mapDispatchToProps = dispatch => {
   return {
     emptyCart: async userId => {
       console.log("Emptying Cart------");
-      const { data } = await Axios.delete(`/api/cart/emptyCart/${userId}`);
+      const { data } = await Axios.delete(`${url}/cart/emptyCart/${userId}`);
       console.log("Data of empty cart-----", data);
       dispatch({ type: EMPTY_CART });
     },

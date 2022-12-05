@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { connect } from "react-redux";
 import ProductCard from "../Components/ProductCard";
+import url from "../Constants";
 
 function SellerProducts({ seller, products }) {
   const [productData, setProductData] = useState([]);
@@ -9,7 +10,7 @@ function SellerProducts({ seller, products }) {
   const fetchProductData = async () => {
     try {
       const response = await Axios.get(
-        `/api/products//getSellerProducts/${seller}`
+        `${url}/products//getSellerProducts/${seller}`
       );
       setProductData(response.data);
     } catch (err) {

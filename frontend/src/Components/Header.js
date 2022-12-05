@@ -14,6 +14,7 @@ import {
   PRODUCT_FETCH_REQUEST_FAIL,
   PRODUCT_SEARCH,
 } from "../Redux/Constants";
+import url from "../Constants";
 
 function Header({
   cart,
@@ -150,7 +151,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchUserCart: async userId => {
-      const { data } = await Axios.get(`/api/cart/${userId}`);
+      const { data } = await Axios.get(`${url}/api/cart/${userId}`);
       dispatch({
         type: CART_DATA_REQUEST,
         payload: data.products ? data.products : [],
@@ -167,7 +168,7 @@ const mapDispatchToProps = dispatch => {
     searchHandler: async keyword => {
       console.log("Keyword", keyword);
       try {
-        const { data } = await Axios.post("/api/products/searchProduct", {
+        const { data } = await Axios.post(`${url}/api/products/searchProduct`, {
           keyword,
         });
         dispatch({

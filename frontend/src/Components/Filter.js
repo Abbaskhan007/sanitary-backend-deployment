@@ -2,6 +2,7 @@ import Axios from "axios";
 import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { connect } from "react-redux";
+import url from "../Constants";
 import { PRODUCT_FETCH_REQUEST_FAIL, PRODUCT_SEARCH } from "../Redux/Constants";
 import PriceSlider from "./PriceSlider";
 
@@ -144,7 +145,7 @@ const mapDispatchToProps = dispatch => {
     filterProducts: async data => {
       try {
         const filteredData = await Axios.post(
-          `/api/products/filteredProducts`,
+          `${url}/products/filteredProducts`,
           data
         );
         console.log("Filtered Data------------", filteredData);

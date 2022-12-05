@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import ErrorBox from "../Components/ErrorBox";
 import { UPDATE_PROFILE } from "../Redux/Constants";
 import { BiPencil } from "react-icons/bi";
+import url from "../Constants";
 
 function UserInfoScreen({ userData, updateProfile }) {
   
@@ -26,7 +27,7 @@ function UserInfoScreen({ userData, updateProfile }) {
 
 
   const getUserData = async () => {
-    const { data } = await Axios.get(`/api/users/getInfo/${userId}`);
+    const { data } = await Axios.get(`${url}/users/getInfo/${userId}`);
     console.log("UseEffect Data", data);
     setUser(data);
   };
@@ -200,7 +201,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     updateProfile: async userData => {
-      const { data } = await Axios.post("/api/users/updateProfile", userData);
+      const { data } = await Axios.post(`${url}/users/updateProfile`, userData);
       console.log("Updated user profile data", data);
       dispatch({
         type: UPDATE_PROFILE,

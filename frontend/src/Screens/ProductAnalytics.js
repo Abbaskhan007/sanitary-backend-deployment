@@ -5,6 +5,7 @@ import { Line, Pie } from "react-chartjs-2";
 import Axios from "axios";
 import DateRange from "../Components/DateRange";
 import { MdCancel } from "react-icons/md";
+import url from "../Constants";
 
 export default function ProductAnalytics() {
   const { id } = useParams();
@@ -52,7 +53,7 @@ export default function ProductAnalytics() {
 
   const onDateSearch = async () => {
     const { data } = await Axios.get(
-      `/api/orders/productDateSale/${id}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
+      `${url}/orders/productDateSale/${id}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
     );
     //setTotalSales(data.totalSales[0].sales);
     const ctgInside = { bank: 0, blockchain: 0 };
@@ -77,7 +78,7 @@ export default function ProductAnalytics() {
   const fetchSales = async () => {
     console.log("---------total sales", totalSales);
 
-    const { data } = await Axios.get(`/api/orders/productSale/${id}`);
+    const { data } = await Axios.get(`${url}/orders/productSale/${id}`);
     let total = 0;
     const sales = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const blockchainSale = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

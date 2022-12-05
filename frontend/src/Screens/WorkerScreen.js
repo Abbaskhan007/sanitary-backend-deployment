@@ -13,6 +13,7 @@ import Select from "react-select";
 import { FiFilter } from "react-icons/fi";
 import Filter from "../Components/Filter";
 import WorkerFilter from "../Components/WorkerFilter";
+import url from "../Constants";
 
 function WorkerScreen({ worker, fetchWorkers, filterWorkers }) {
   const data = [
@@ -116,7 +117,7 @@ const mapDispatchToProps = dispatch => {
       console.log("Running");
       dispatch({ type: WORKER_FETCH_REQUEST });
       try {
-        const { data } = await Axios.get("/api/worker/getWorkers");
+        const { data } = await Axios.get(`${url}/worker/getWorkers`);
         console.log("Workers Data --", data);
         dispatch({ type: WORKER_FETCH_SUCCESS, payload: data });
       } catch (err) {
@@ -126,7 +127,7 @@ const mapDispatchToProps = dispatch => {
     filterWorkers: async filterData => {
       try {
         const { data } = await Axios.post(
-          "/api/worker/filterWorkers",
+          `${url}/worker/filterWorkers`,
           filterData
         );
         console.log("Workers Data --", data);

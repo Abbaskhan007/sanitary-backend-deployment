@@ -14,6 +14,7 @@ import {
 import Loading from "../Components/Loading";
 import { useNavigate } from "react-router-dom";
 import ErrorBox from "../Components/ErrorBox";
+import url from "../Constants";
 
 function Login({ loginAction, user, cart }) {
   const [email, setEmail] = useState("");
@@ -97,7 +98,7 @@ const mapDispatchToProps = dispatch => {
         type: LOGIN_REQUEST,
       });
       try {
-        const { data } = await Axios.post("/api/users/login", userData);
+        const { data } = await Axios.post(`${url}/users/login`, userData);
         console.log("Data----", data);
         if (data.message) {
           dispatch({
@@ -112,7 +113,7 @@ const mapDispatchToProps = dispatch => {
           if (data.user.isSeller) {
             try {
               const response = await Axios.get(
-                `/api/seller/getSeller/${data.user._id}`
+                `${url}/seller/getSeller/${data.user._id}`
               );
               console.log("Response", response);
               dispatch({ type: FETCH_SELLER_DATA, payload: response.data });
@@ -128,7 +129,7 @@ const mapDispatchToProps = dispatch => {
 
           await cart.forEach(async item => {
             console.log("Item", item);
-            const cartData = await Axios.post("/api/cart/addToCart", {
+            const cartData = await Axios.post(`${url}/cart/addToCart`, {
               user: data.user._id,
               products: {
                 product: item.product._id,

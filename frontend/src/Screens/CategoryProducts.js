@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams, useRoutes } from "react-router-dom";
 import Axios from "axios";
 import ProductCard from "../Components/ProductCard";
+import url from "../Constants";
 
 export default function CategoryProducts() {
   const [productList, setProductList] = useState([]);
   const { category } = useParams();
   const fetchProducts = async () => {
     const { data } = await Axios.get(
-      `/api/products/getCategoryProducts/${category}`
+      `${url}/products/getCategoryProducts/${category}`
     );
     setProductList(data);
     console.log("Data----", data);

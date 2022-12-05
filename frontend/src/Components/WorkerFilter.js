@@ -4,16 +4,18 @@ import { connect } from "react-redux";
 import { WORKER_FETCH_FAILURE, WORKER_FETCH_SUCCESS } from "../Redux/Constants";
 import PriceSlider from "./PriceSlider";
 import Axios from "axios";
+import url from "../Constants";
 
 function WorkerFilter({
   filterWorkers,
   showFilter,
   setShowFilter,
   categories,
-  city, setCity, value, setValue
+  city,
+  setCity,
+  value,
+  setValue,
 }) {
-
-
   const min = 1;
   const max = 5000;
 
@@ -116,7 +118,7 @@ const mapDispatchToProps = dispatch => {
     filterWorkers: async filterData => {
       try {
         const { data } = await Axios.post(
-          "/api/worker/filterWorkers",
+          `${url}/worker/filterWorkers`,
           filterData
         );
         console.log("Workers Data --", data);

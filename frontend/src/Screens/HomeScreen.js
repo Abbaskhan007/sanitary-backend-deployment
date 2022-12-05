@@ -19,6 +19,7 @@ import { FiFilter } from "react-icons/fi";
 import ImageSearch from "./ImageSearch";
 import Banner from "../Components/Banner";
 import CategoriesSection from "../Components/CategoriesSection";
+import url from "../Constants";
 
 function HomeScreen({
   fetchProducts,
@@ -149,7 +150,7 @@ const mapDispatchToProps = dispatch => {
       //const data = axios.get("/");
       dispatch({ type: PRODUCT_FETCH_REQUEST });
       try {
-        const { data } = await Axios.get("/api/products/getProducts");
+        const { data } = await Axios.get(`${url}/products/getProducts`);
         console.log(data);
         dispatch({
           type: PRODUCT_FETCH_REQUEST_SUCCESS,
@@ -165,7 +166,7 @@ const mapDispatchToProps = dispatch => {
     searchHandler: async keyword => {
       console.log("Keyword", keyword);
       try {
-        const { data } = await Axios.post("/api/products/searchProduct", {
+        const { data } = await Axios.post(`${url}/products/searchProduct`, {
           keyword,
         });
         dispatch({
@@ -182,7 +183,7 @@ const mapDispatchToProps = dispatch => {
     getCategories: async () => {
       console.log("Categories*****************___________________________!!!");
       try {
-        const { data } = await Axios.get(`/api/categories`);
+        const { data } = await Axios.get(`${url}/categories`);
         dispatch({
           type: GET_CATEGORIES,
           payload: data,
@@ -194,7 +195,7 @@ const mapDispatchToProps = dispatch => {
     getWorkerCategories: async () => {
       console.log("Categories*****************___________________________!!!");
       try {
-        const { data } = await Axios.get(`/api/workerCategories`);
+        const { data } = await Axios.get(`${url}/workerCategories`);
         console.log("Worker Categories________", data);
         dispatch({
           type: GET_WORKERS_CATEGORIES,

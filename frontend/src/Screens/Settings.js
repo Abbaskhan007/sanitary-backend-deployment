@@ -5,6 +5,7 @@ import SellerForm from "../Components/SellerForm";
 import WorkerForm from "../Components/WorkerForm";
 import { DELETE_ACCOUNT } from "../Redux/Constants";
 import { useNavigate } from "react-router-dom";
+import url from "../Constants";
 
 function Settings({ user, deleteAccount }) {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const mapDispatchToProps = dispatch => {
   return {
     deleteAccount: async (id, navigate) => {
       try {
-        const response = await Axios.delete(`/api/users/deleteAccount/${id}`);
+        const response = await Axios.delete(`${url}/users/deleteAccount/${id}`);
         console.log("Response", response);
         if (response.status === 200) {
           dispatch({ type: DELETE_ACCOUNT, payload: id });

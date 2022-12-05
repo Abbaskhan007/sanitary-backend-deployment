@@ -3,7 +3,7 @@ import Axios from "axios";
 import { GrCamera } from "react-icons/gr";
 import { connect } from "react-redux";
 import { PRODUCT_SEARCH } from "../Redux/Constants";
-
+import url from "../Constants";
 
 function ImageSearch({ fetchProducts, setLoading, executeScroll }) {
   const imageRef = useRef(null);
@@ -25,7 +25,7 @@ function ImageSearch({ fetchProducts, setLoading, executeScroll }) {
       );
       console.log("Public Ids", public_ids);
       const productData = await Axios.post(
-        "/api/products/imageSearch",
+        `${url}/products/imageSearch`,
         public_ids
       );
       setTimeout(executeScroll(), 1200);

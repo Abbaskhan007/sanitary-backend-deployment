@@ -5,6 +5,7 @@ import Select from "react-select";
 import { IoCameraOutline, IoCloseOutline } from "react-icons/io5";
 import Axios from "axios";
 import Loading from "./Loading";
+import url from "../Constants";
 
 function WorkerForm({
   showModel,
@@ -21,7 +22,6 @@ function WorkerForm({
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [cloudinaryFormatImages, setCloudinaryFormatImages] = useState([]);
-
 
   const onImageChange = e => {
     console.log("()", e.target.files[0]);
@@ -77,7 +77,7 @@ function WorkerForm({
     console.log("Data", workerData);
     try {
       const response = await Axios.post(
-        "/api/workerRequests/sendWorkerRequest",
+        `${url}/workerRequests/sendWorkerRequest`,
         workerData
       );
       if (response.status === 200) {

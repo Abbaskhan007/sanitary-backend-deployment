@@ -7,6 +7,7 @@ import {
   IoCloseSharp,
 } from "react-icons/io5";
 import { connect } from "react-redux";
+import url from "../Constants";
 
 function SellerRequests() {
   const [requests, setRequests] = useState([]);
@@ -17,7 +18,7 @@ function SellerRequests() {
   }, []);
 
   const fetchRequests = async () => {
-    const response = await Axios.get("/api/sellerRequests");
+    const response = await Axios.get(`${url}/sellerRequests`);
     if (response.status === 200) {
       setRequests(response.data);
     }
@@ -25,14 +26,14 @@ function SellerRequests() {
 
   const onAccept = async (userId, requestId) => {
     try {
-      const response = await Axios.put(`/api/sellerRequests/acceptRequest`, {
+      const response = await Axios.put(`${url}/sellerRequests/acceptRequest`, {
         userId,
         requestId,
       });
 
       console.log("Requests", response);
       const { categories, description, user } = response.data;
-      Axios.post("/api/seller/createSeller", {
+      Axios.post(`${url}/seller/createSeller`, {
         categories,
         description,
         user: user,
@@ -45,7 +46,7 @@ function SellerRequests() {
 
   const onReject = async (userId, requestId) => {
     try {
-      const response = await Axios.put(`/api/sellerRequests/rejectRequest`, {
+      const response = await Axios.put(`${url}/sellerRequests/rejectRequest`, {
         requestId,
       });
       fetchRequests();

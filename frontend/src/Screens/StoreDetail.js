@@ -12,12 +12,13 @@ import StoreDescriptionScreen from "./StoreDescriptionScreen";
 import StoreProductsScreen from "./StoreProductsScreen";
 import Axios from "axios";
 import { connect } from "react-redux";
+import url from "../Constants";
 
 function StoreDetail({ seller }) {
   const [storeData, setStoreData] = useState({});
   const { storeId } = useParams();
   const getStoreData = async () => {
-    const { data } = await Axios.get(`/api/stores/getStore/${storeId}`);
+    const { data } = await Axios.get(`${url}/stores/getStore/${storeId}`);
     console.log(
       "Store Data",
       storeData,

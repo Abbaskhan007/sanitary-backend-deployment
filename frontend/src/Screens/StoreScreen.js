@@ -11,6 +11,7 @@ import {
   STORE_FETCH_REQUEST,
   STORE_FETCH_SUCCESS,
 } from "../Redux/Constants";
+import url from "../Constants";
 
 function StoreScreen({ fetchStoreData, store, filterStore, categoryTypes }) {
   const [category, setCategory] = useState([]);
@@ -94,7 +95,7 @@ const mapDispatchToProps = dispatch => {
       dispatch({ type: STORE_FETCH_REQUEST });
 
       try {
-        const { data } = await axios.get("api/stores/getStores");
+        const { data } = await axios.get(`${url}/stores/getStores`);
         dispatch({
           type: STORE_FETCH_SUCCESS,
           payload: data,
@@ -105,7 +106,7 @@ const mapDispatchToProps = dispatch => {
     },
     filterStore: async filterData => {
       console.log("********** Filtered Data", filterData);
-      const { data } = await axios.post("api/stores/filterStore", filterData);
+      const { data } = await axios.post(`${url}/stores/filterStore`, filterData);
       console.log("Data of stores -----", data);
       dispatch({
         type: STORE_FETCH_SUCCESS,

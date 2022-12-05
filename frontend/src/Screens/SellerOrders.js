@@ -5,6 +5,7 @@ import ViewOrderScreen from "./ViewOrderScreen";
 import { IoCreateOutline } from "react-icons/io5";
 import Menu from "../Components/Menu";
 import moment from "moment";
+import url from "../Constants";
 function SellerOrders({ seller }) {
   const [orders, setOrders] = useState([]);
   const [orderId, setOrderId] = useState("");
@@ -29,13 +30,13 @@ function SellerOrders({ seller }) {
 
   const fetchOrders = async () => {
     const { data } = await Axios.get(
-      `/api/orders/sellerOrders/${seller}?status=${activeTab}`
+      `${url}/orders/sellerOrders/${seller}?status=${activeTab}`
     );
     setOrders(data);
   };
 
   const updateOrderStatus = async (orderId, status, storeId) => {
-    const { data } = await Axios.put("/api/orders/updateOrder", {
+    const { data } = await Axios.put(`${url}/orders/updateOrder`, {
       orderId,
       status,
       storeId,

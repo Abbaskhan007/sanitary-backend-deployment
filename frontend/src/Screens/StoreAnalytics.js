@@ -14,6 +14,7 @@ import { Line, Pie } from "react-chartjs-2";
 import Axios from "axios";
 import DateRange from "../Components/DateRange";
 import { MdCancel } from "react-icons/md";
+import url from "../Constants";
 
 export default function StoreAnalytics() {
   const { id } = useParams();
@@ -70,7 +71,7 @@ export default function StoreAnalytics() {
 
   const onDateSearch = async () => {
     const { data } = await Axios.get(
-      `/api/orders/storeDateSale/${id}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
+      `${url}/orders/storeDateSale/${id}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
     );
 
     console.log("Data------", data);
@@ -119,7 +120,7 @@ export default function StoreAnalytics() {
     console.log("---------total sales", totalSales);
 
     const { data } = await Axios.get(
-      `/api/orders/storeSale/${id}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
+      `${url}/orders/storeSale/${id}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
     );
 
     console.log("Data --------", data);

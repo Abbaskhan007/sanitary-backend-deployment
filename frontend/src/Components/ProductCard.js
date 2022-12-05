@@ -9,6 +9,7 @@ import {
   PRODUCT_FETCH_REQUEST_FAIL,
   PRODUCT_FETCH_REQUEST_SUCCESS,
 } from "../Redux/Constants";
+import url from "../Constants";
 
 function ProductCard({ product, seller, fetchProducts }) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function ProductCard({ product, seller, fetchProducts }) {
     e.stopPropagation();
     try {
       const response = await Axios.delete(
-        `/api/products/delete/${product._id}`
+        `${url}/products/delete/${product._id}`
       );
       console.log("Response", response);
       if (response.status === 200) {
@@ -80,13 +81,12 @@ const mapStateToProps = state => {
   };
 };
 
-
 const mapDispatchToProps = dispatch => {
   return {
     fetchProducts: async () => {
       dispatch({ type: PRODUCT_FETCH_REQUEST });
       try {
-        const { data } = await Axios.get("/api/products/getProducts");
+        const { data } = await Axios.get(`${url}/products/getProducts`);
         dispatch({
           type: PRODUCT_FETCH_REQUEST_SUCCESS,
           payload: data,

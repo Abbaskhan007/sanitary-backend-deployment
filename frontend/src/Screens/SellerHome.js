@@ -6,6 +6,7 @@ import { Line, Pie } from "react-chartjs-2";
 import Axios from "axios";
 import { MdCancel } from "react-icons/md";
 import DateRange from "../Components/DateRange";
+import url from "../Constants";
 
 function SellerHome({ user, fetchSellerData, seller }) {
   console.log("Seller-----", seller);
@@ -41,7 +42,7 @@ function SellerHome({ user, fetchSellerData, seller }) {
 
   const onDateSearch = async () => {
     const { data } = await Axios.get(
-      `/api/seller/sellerDateSale/${seller}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
+      `${url}/seller/sellerDateSale/${seller}?startDate=${startDate.toISOString()}&&endDate=${endDate.toISOString()}`
     );
 
     console.log("Data------", data);
@@ -103,7 +104,7 @@ function SellerHome({ user, fetchSellerData, seller }) {
     };
     const typeInside = { bank: 0, blockchain: 0 };
 
-    const { data } = await Axios.get(`/api/seller/getSales/${seller}`);
+    const { data } = await Axios.get(`${url}/seller/getSales/${seller}`);
 
     const bankSalesPerMonth = data.bankSales.map(item => {
       sales[item._id.month - 1] = sales[item._id.month - 1] + item.sales;
@@ -339,7 +340,7 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchSellerData: async user => {
       try {
-        const response = await Axios.get(`/api/seller/getSeller/${user}`);
+        const response = await Axios.get(`${url}/seller/getSeller/${user}`);
         console.log("Response", response);
         dispatch({ type: FETCH_SELLER_DATA, payload: response.data });
       } catch (err) {

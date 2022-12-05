@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../Components/Loading";
 import { connect } from "react-redux";
+import url from "../Constants";
 
 function EditProduct({ productCategories }) {
   const { productId } = useParams();
@@ -43,7 +44,7 @@ function EditProduct({ productCategories }) {
   console.log("Iamges-----", cloudinaryImages);
 
   const fetchProduct = async () => {
-    const product = await Axios.get(`/api/products/getProduct/${productId}`);
+    const product = await Axios.get(`${url}/products/getProduct/${productId}`);
     setProductData(product.data);
     console.log("Product", product.data);
     setName(product.data.name);
@@ -132,7 +133,7 @@ function EditProduct({ productCategories }) {
       };
       try {
         const response = await Axios.put(
-          `/api/products/updateProduct/${productData._id}`,
+          `${url}/products/updateProduct/${productData._id}`,
           data
         );
         console.log("response*********************** (4)", response);

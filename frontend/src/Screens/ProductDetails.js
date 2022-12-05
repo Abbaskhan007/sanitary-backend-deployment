@@ -10,6 +10,7 @@ import Slider from "../Components/Slider";
 import { connect } from "react-redux";
 import { ADD_TO_CART, ADD_TO_CART_LOCAL } from "../Redux/Constants";
 import ReviewBox from "../Components/ReviewBox";
+import url from "../Constants";
 
 function ProductDetails({
   addToCartAction,
@@ -35,7 +36,7 @@ function ProductDetails({
   }, []);
   const fetchData = async () => {
     try {
-      const { data } = await Axios.get(`/api/products/getProduct/${productId}`);
+      const { data } = await Axios.get(`${url}/products/getProduct/${productId}`);
       setProductData(data);
       setLoading(false);
     } catch (err) {
@@ -197,7 +198,7 @@ const mapDispatchToProps = dispatch => {
   return {
     addToCartAction: async item => {
       console.log("Item: ", item);
-      const { data } = await Axios.post("/api/cart/addToCart", item);
+      const { data } = await Axios.post(`${url}/cart/addToCart`, item);
       dispatch({
         type: ADD_TO_CART,
         payload: data.products,

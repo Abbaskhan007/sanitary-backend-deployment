@@ -3,12 +3,13 @@ import RatingStars from "../Components/RatingStars";
 import moment from "moment";
 import Axios from "axios";
 import ReviewBox from "../Components/ReviewBox";
+import url from "../Constants";
 
 export default function StoreDescriptionScreen({ description, user }) {
   console.log("Description", description);
   const [reviews, setReviews] = useState([]);
   const fetchReviews = async () => {
-    const { data } = await Axios.post("/api/orders/getReviews", {
+    const { data } = await Axios.post(`${url}/orders/getReviews`, {
       storeId: description._id,
     });
     console.log("data of reviews", data);

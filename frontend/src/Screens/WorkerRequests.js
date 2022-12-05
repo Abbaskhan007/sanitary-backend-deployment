@@ -6,6 +6,7 @@ import {
   IoChevronUpOutline,
   IoCloseSharp,
 } from "react-icons/io5";
+import url from "../Constants";
 
 export default function WorkerRequests() {
   const [requests, setRequests] = useState([]);
@@ -16,7 +17,7 @@ export default function WorkerRequests() {
   }, []);
 
   const fetchRequests = async () => {
-    const response = await Axios.get("/api/workerRequests");
+    const response = await Axios.get(`${url}/workerRequests`);
     if (response.status === 200) {
       setRequests(response.data);
     }
@@ -24,14 +25,14 @@ export default function WorkerRequests() {
 
   const onAccept = async (userId, requestId, price, images) => {
     try {
-      const response = await Axios.put(`/api/workerRequests/acceptRequest`, {
+      const response = await Axios.put(`${url}/workerRequests/acceptRequest`, {
         userId,
         requestId,
       });
 
       console.log("Requests", response);
       const { categories, description, user, city } = response.data;
-      Axios.post("/api/worker/createWorker", {
+      Axios.post(`${url}/worker/createWorker`, {
         category: categories,
         description,
         user: user,
@@ -49,7 +50,7 @@ export default function WorkerRequests() {
     console.log("Request Id", requestId);
     try {
       const response = await Axios.put(
-        `/api/workerRequests/rejectRequest/`,{requestId}
+        `${url}/workerRequests/rejectRequest/`,{requestId}
       );
       fetchRequests();
     } catch (err) {

@@ -10,6 +10,7 @@ import {
 } from "../Redux/Constants";
 import Axios from "axios";
 import ErrorBox from "./ErrorBox";
+import url from "../Constants";
 
 function CartItem({
   item,
@@ -141,7 +142,7 @@ const mapDispatchToProps = dispatch => {
     updateCart: async productData => {
       console.log("Product Data", productData);
       const { data } = await Axios.post(
-        "/api/cart/changeQuantity",
+        `${url}/cart/changeQuantity`,
         productData
       );
       console.log("Data", data);
@@ -152,7 +153,7 @@ const mapDispatchToProps = dispatch => {
     },
     deleteProduct: async productData => {
       const { data } = await Axios.delete(
-        `/api/cart/deleteProduct?productId=${productData.productId}&userId=${productData.userId}`
+        `${url}/cart/deleteProduct?productId=${productData.productId}&userId=${productData.userId}`
       );
       console.log("Data", data);
       dispatch({

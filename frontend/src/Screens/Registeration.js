@@ -12,6 +12,7 @@ import {
   REGISTERATION_REQUEST_SUCCESS,
 } from "../Redux/Constants";
 import Loading from "../Components/Loading";
+import url from "../Constants";
 
 function Registeration({ registerAction, user, cart }) {
   const [name, setName] = useState("");
@@ -131,7 +132,7 @@ const mapDispatchToProps = dispatch => {
         type: REGISTERATION_REQUEST,
       });
       try {
-        const { data } = await Axios.post("/api/users/registeration", userData);
+        const { data } = await Axios.post(`${url}/users/registeration`, userData);
         console.log("Data----", data);
         if (data.message) {
           dispatch({
@@ -155,7 +156,7 @@ const mapDispatchToProps = dispatch => {
     
           await cart.forEach(async (item) => {
             console.log("Item", item);
-            const cartData = await Axios.post("/api/cart/addToCart", {
+            const cartData = await Axios.post(`${url}/cart/addToCart`, {
               user: data.user._id,
               products: {
                 product: item.product._id,
