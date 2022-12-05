@@ -151,7 +151,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchUserCart: async userId => {
-      const { data } = await Axios.get(`${url}/api/cart/${userId}`);
+      const { data } = await Axios.get(`${url}/cart/${userId}`);
       dispatch({
         type: CART_DATA_REQUEST,
         payload: data.products ? data.products : [],
@@ -168,7 +168,7 @@ const mapDispatchToProps = dispatch => {
     searchHandler: async keyword => {
       console.log("Keyword", keyword);
       try {
-        const { data } = await Axios.post(`${url}/api/products/searchProduct`, {
+        const { data } = await Axios.post(`${url}/products/searchProduct`, {
           keyword,
         });
         dispatch({
