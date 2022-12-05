@@ -3,7 +3,7 @@ import Axios from "axios";
 import { GrCamera } from "react-icons/gr";
 import { connect } from "react-redux";
 import { PRODUCT_SEARCH } from "../Redux/Constants";
-import mime from "mime";
+
 
 function ImageSearch({ fetchProducts, setLoading, executeScroll }) {
   const imageRef = useRef(null);
