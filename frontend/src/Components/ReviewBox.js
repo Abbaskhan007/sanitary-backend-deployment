@@ -4,8 +4,8 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import ViewOrderScreen from "../Screens/ViewOrderScreen";
 
-export default function ReviewBox({ review }) {
-  console.log("Review)))))", review);
+export default function ReviewBox({ review, showOrderDetails = false }) {
+  console.log("Review)))))-----", review);
   const [model, setModel] = useState(false);
   const navigation = useNavigate();
   return (
@@ -29,12 +29,14 @@ export default function ReviewBox({ review }) {
         <p className="text-sm text-gray-400">
           {moment(review.createdAt).format("YYYY-MM-DD")}
         </p>
-        <p
-          className="font-medium text-sm text-gray-400 underline cursor-pointer"
-          onClick={() => setModel(true)}
-        >
-          View Order
-        </p>
+        {showOrderDetails && (
+          <p
+            className="font-medium text-sm text-gray-400 underline cursor-pointer"
+            onClick={() => setModel(true)}
+          >
+            View Order
+          </p>
+        )}
       </div>
     </div>
   );

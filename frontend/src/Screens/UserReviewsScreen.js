@@ -26,7 +26,7 @@ function UserReviewsScreen({ user }) {
         {user.name} Review
       </h2>
       {reviews.map(review => (
-        <ReviewBox review={review} />
+        <ReviewBox showOrderDetails={true} review={review} />
       ))}
     </div>
   );

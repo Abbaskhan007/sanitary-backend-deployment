@@ -285,7 +285,10 @@ export default function StoreAnalytics() {
         <div className="w-48 py-6 space-y-2 shadow-lg shadow-gray-400 flex flex-col justify-center items-center border border-gray-300 rounded-lg">
           <h5 className="text-2xl ">Previous Month</h5>
           <h6 className="text-lg text-gray-400">
-            Rs. {sales[(currentMonth - 1) % 12].toFixed(0)}
+            Rs.{" "}
+            {sales[
+              currentMonth - 1 > 0 ? (currentMonth - 1) % 12 : 11
+            ]?.toFixed(0)}
           </h6>
         </div>
       </div>

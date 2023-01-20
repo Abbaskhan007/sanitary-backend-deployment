@@ -105,7 +105,7 @@ function SellerOrders({ seller }) {
       </div>
       {orders.length > 0 ? (
         <div
-          className={`md:w-[500px] lg:w-[800px] xl:w-[1000px]  overflow-x-scroll`}
+          className={`  overflow-x-scroll`}
         >
           <table>
             <thead class="border-b bg-gray-200">

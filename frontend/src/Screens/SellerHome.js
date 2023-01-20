@@ -121,18 +121,20 @@ function SellerHome({ user, fetchSellerData, seller }) {
       total += item.sales * etheriumValue;
     });
 
+    console.log("bank Orders", data.bankOrders);
+
     setTotalSales(total);
     data.bankOrders.map(item => {
       typeInside[item.paymentMethod] =
         typeInside[item.paymentMethod] + item.amount;
-      ctgInside[item.productId.category] =
-        ctgInside[item.productId.category] + item.amount;
+      ctgInside[item?.productId?.category] =
+        ctgInside[item?.productId?.category] + item.amount;
     });
     data.blockchainOrders.map(item => {
       typeInside[item.paymentMethod] =
         typeInside[item.paymentMethod] + item.amount * etheriumValue;
-      ctgInside[item.productId.category] =
-        ctgInside[item.productId.category] + item.amount * etheriumValue;
+      ctgInside[item?.productId?.category] =
+        ctgInside[item?.productId?.category] + item.amount * etheriumValue;
     });
 
     setSales(sales.slice(0, 12));
@@ -161,7 +163,7 @@ function SellerHome({ user, fetchSellerData, seller }) {
 
   useEffect(() => {
     if (showDate) {
-       onDateSearch();
+      onDateSearch();
     }
   }, [startDate, endDate, showDate]);
 
@@ -266,12 +268,17 @@ function SellerHome({ user, fetchSellerData, seller }) {
       <div className="flex items-center justify-center space-x-8">
         <div className="w-48 py-6 space-y-2  shadow-lg shadow-gray-400 flex flex-col justify-center items-center border border-gray-300  rounded-lg">
           <h5 className="text-2xl ">Total Sales</h5>
-          <h6 className="text-lg text-gray-400">Rs. {totalSales.toFixed(0)}</h6>
+          <h6 className="text-lg text-gray-400">
+            Rs. {totalSales?.toFixed(0)}
+          </h6>
         </div>
         <div className="w-48 py-6 space-y-2 shadow-lg shadow-gray-400 flex flex-col justify-center items-center border border-gray-300 rounded-lg">
           <h5 className="text-2xl ">Previous Month</h5>
           <h6 className="text-lg text-gray-400">
-            Rs. {sales[(currentMonth - 1) % 12].toFixed(0)}
+            Rs.{" "}
+            {sales[
+              currentMonth - 1 > 0 ? (currentMonth - 1) % 12 : 11
+            ]?.toFixed(0)}
           </h6>
         </div>
       </div>
